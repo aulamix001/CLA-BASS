@@ -53,6 +53,19 @@ BassEditor::BassEditor(BassProcessor& p):AudioProcessorEditor(&p),processor(p) {
     setSize(900,570); setResizable(false,false); startTimerHz(30);
 }
 BassEditor::~BassEditor() { stopTimer(); setLookAndFeel(nullptr); }
+void BassEditor::parentHierarchyChanged() { selectCompatibleRenderer(); }
+void BassEditor::visibilityChanged() { selectCompatibleRenderer(); }
+void BassEditor::selectCompatibleRenderer() {
+#if JUCE_WINDOWS
+    // The VST3 wrapper creates the native peer after the editor constructor.
+    // Select JUCE's supported GDI backend before the first hosted repaint.
+    if(auto* peer=getPeer()) {
+        const int software=peer->getAvailableRenderingEngines().indexOf("Software Renderer");
+        if(software>=0 && peer->getCurrentRenderingEngine()!=software)
+            peer->setCurrentRenderingEngine(software);
+    }
+#endif
+}
 void BassEditor::resized() {
     reset.setBounds(260,6,48,22); undoButton.setBounds(310,6,48,22); redoButton.setBounds(360,6,48,22);
     compare.setBounds(410,6,48,22); load.setBounds(460,6,48,22); save.setBounds(510,6,48,22);

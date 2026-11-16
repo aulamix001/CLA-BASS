@@ -7,6 +7,8 @@ public:
     ~BassEditor() override;
     void paint(juce::Graphics&) override;
     void resized() override;
+    void parentHierarchyChanged() override;
+    void visibilityChanged() override;
     void mouseDown(const juce::MouseEvent&) override;
 private:
     struct MetalLook final : juce::LookAndFeel_V4 {
@@ -15,6 +17,7 @@ private:
     } look;
     void timerCallback() override;
     void choosePreset(bool save);
+    void selectCompatibleRenderer();
     BassProcessor& processor;
     juce::TooltipWindow tips{this,700};
     std::array<juce::Slider,9> sliders;
