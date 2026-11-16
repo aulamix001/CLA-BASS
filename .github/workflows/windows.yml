@@ -1,0 +1,37 @@
+name: Windows x64 VST3
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure MSVC x64
+        run: cmake -S . -B build -A x64
+      - name: Build
+        run: cmake --build build --config Release --parallel 2
+      - name: Tests
+        run: ctest --test-dir build -C Release --output-on-failure
+      - name: Package Windows x64 VST3
+        shell: pwsh
+        run: |
+          $bundle = 'build/FoundationBass_artefacts/Release/VST3/Foundation Bass.vst3'
+          $binary = Join-Path $bundle 'Contents/x86_64-win/Foundation Bass.vst3'
+          if (!(Test-Path $binary)) { throw 'Windows x64 VST3 binary was not produced' }
+          Compress-Archive -LiteralPath $bundle -DestinationPath Foundation-Bass-Windows-x64.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Foundation-Bass-Windows-x64
+          path: |
+            Foundation-Bass-Windows-x64.zip
+            build/FoundationBass_artefacts/Release/Standalone/*.exe
+      - name: Publish downloadable Windows build
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $tag = 'windows-${{ github.sha }}'
+          gh release create $tag Foundation-Bass-Windows-x64.zip --repo '${{ github.repository }}' --target '${{ github.sha }}' --title 'Foundation Bass Windows x64' --notes 'VST3 x64 built with MSVC 2022; DSP and processor tests passed on Windows. Provisional interface; independent DSP implementation. Extract the complete .vst3 folder into your VST3 directory.'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

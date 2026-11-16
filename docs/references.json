@@ -1,0 +1,90 @@
+[
+  {
+    "name": "1001.xml",
+    "bytes": 2020,
+    "sha256": "d16fdc7a412223908eadb0d0aca2c0e620e6b15a34708e3f6d83bfbf00aa56b6",
+    "root": "ComponentDefinitions"
+  },
+  {
+    "name": "1003.xml",
+    "bytes": 5855,
+    "sha256": "d41ac87526be5470d05ac4b1ce8352861c77824d803c7c2cfd563d42044514d5",
+    "root": "StaticChainerDef"
+  },
+  {
+    "name": "1010.xml",
+    "bytes": 21218,
+    "sha256": "dc5899181e68a56a451c34cd29fcb5a00edacbfda3cfe806335977a3f88e9869",
+    "root": "PresetXMLTree"
+  },
+  {
+    "name": "1001.xml",
+    "bytes": 272,
+    "sha256": "cb35756ae8cb61302b62991387587718940d8774a0a56a5f81b68fe37c77fb36",
+    "root": "cALGORITHMs"
+  },
+  {
+    "name": "CLA Bass.pdf",
+    "bytes": 527445,
+    "sha256": "f142d50673b39adb265bce623a2f9a305cdd9573ead61763ae6b9ff7d64148d0"
+  },
+  {
+    "name": "1000.xml",
+    "bytes": 8229,
+    "sha256": "17a4f2fd1a0e3753849a3526c11f67ea97db820398c6de04023775020ae18cb9",
+    "root": "ComponentDefinitions"
+  },
+  {
+    "name": "1000.xml",
+    "bytes": 34457,
+    "sha256": "f556f3f8a1704c53816d8ed21d9757d4a19dbb83a9413e9e1055917f3b905337",
+    "root": "GUITree"
+  },
+  {
+    "name": "1100",
+    "bytes": 33342,
+    "sha256": "9d322c021dad9ab35e823d2382528fb391aef92fd31db1cd5497fa2560bc9695"
+  },
+  {
+    "name": "1004.xml",
+    "bytes": 207,
+    "sha256": "2db7da46c9c696d93a5994fc16535d1e9ff40db34ef6f8f41c7af0422d32efdd",
+    "root": "not XML (chain dependency metadata)"
+  },
+  {
+    "name": "1001.xml",
+    "bytes": 4515,
+    "sha256": "05e8460590350ab8b494d3c4bc5689053df3b764114f3c8ff6ec28f635b228f9",
+    "root": "ToolbarXML"
+  },
+  {
+    "name": "1001.xml",
+    "bytes": 752,
+    "sha256": "c4eee323cb2e85568edf1867c07938b8a265b42e2976b4b7737c9282c46d2250",
+    "root": "ShellInfo"
+  },
+  {
+    "name": "1000.xml",
+    "bytes": 20099,
+    "sha256": "ce72e8913ae2a111e99af76cf79870c2ab2c104afcc28265846232587541c191",
+    "root": "Parameter_List"
+  },
+  {
+    "name": "1000.xml",
+    "bytes": 11908,
+    "sha256": "acee429ba3b64dcb0d36690fdf923e963126dd3b3b2b27084b2de9adcff04fbf",
+    "root": "PresetXMLTree"
+  },
+  {
+    "name": "3950.xml",
+    "bytes": 43768,
+    "sha256": "0207a067e642a0943c3fb752c842ce1b84896225b7a266a8199739134f7503b9",
+    "root": "PageTables"
+  },
+  {
+    "name": "1011.xml",
+    "bytes": 12639,
+    "sha256": "b5cf65af9f10bf31435615e184b06a1f93c1a801aa7825f85d9f2a1c0e5b9f80",
+    "root": "PresetXMLTree"
+  }
+]
