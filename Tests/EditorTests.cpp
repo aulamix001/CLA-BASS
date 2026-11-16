@@ -29,9 +29,12 @@ public:
     bool passed=false;
 private:
     void closeEditor() {
+        if(window) {
+            window->setVisible(false);
+            window->clearContentComponent();
+            window.reset();
+        }
         if(editor) {
-            editor->setVisible(false);
-            editor->removeFromDesktop();
             editor.reset();
         }
     }
@@ -45,8 +48,9 @@ private:
         if(phase==0) {
             editor.reset(processor.createEditorIfNeeded());
             if(!editor) {finish(false,"Missing editor"); return;}
-            editor->addToDesktop(juce::ComponentPeer::windowIsTemporary);
-            editor->setVisible(true);
+            window=std::make_unique<juce::DocumentWindow>("Bass editor host",juce::Colours::black,juce::DocumentWindow::closeButton);
+            window->setContentNonOwned(editor.get(),true);
+            window->setVisible(true);
             auto* peer=editor->getPeer();
             if(!peer) {finish(false,"Missing native window peer"); return;}
 #if JUCE_WINDOWS
@@ -70,6 +74,7 @@ private:
     }
     BassProcessor processor;
     std::unique_ptr<juce::AudioProcessorEditor> editor;
+    std::unique_ptr<juce::DocumentWindow> window;
     std::atomic<bool> running{true};
     std::thread worker;
     int phase=0,cycles=0;
