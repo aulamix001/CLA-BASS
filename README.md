@@ -14,9 +14,12 @@ de automação, o estado dos presets e a imagem definitiva não foram alterados.
 
 O fechamento relatado no REAPER não foi reproduzido no validador da versão
 original; essas alterações tratam dependências de compatibilidade, sem atribuir
-uma causa confirmada ao computador do usuário. O workflow inclui pluginval nível
-5, ciclos de janela nativa durante áudio e um teste com REAPER 7.86 x64 isolado.
-Studio One ainda não foi testado.
+uma causa confirmada ao computador do usuário. O workflow exige pluginval nível
+5 e ciclos de janela nativa durante áudio. O teste separado com REAPER 7.86 x64
+isolado não chegou à execução do ReaScript no desktop do CI (run 43935445246);
+permanece disponível por acionamento manual. Essa limitação não conta como teste
+de inserção aprovado. REAPER no computador do usuário e Studio One ainda precisam
+ser validados. A revisão é publicada como candidata de compatibilidade.
 
 Ao atualizar, feche a DAW e substitua a **pasta `.vst3` completa**. Evite manter
 uma segunda cópia antiga em outro diretório de plugins. Atualize a lista de

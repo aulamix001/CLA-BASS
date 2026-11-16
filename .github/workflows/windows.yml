@@ -1,5 +1,13 @@
 name: Windows x64 VST3
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      reaper_smoke:
+        description: 'Run REAPER desktop integration (requires working interactive startup)'
+        type: boolean
+        default: false
 jobs:
   build:
     runs-on: windows-2022
@@ -37,6 +45,7 @@ jobs:
           if (!(Test-Path $binary)) { throw 'Windows x64 VST3 binary was not produced' }
           Compress-Archive -LiteralPath $bundle -DestinationPath Foundation-Bass-Windows-x64.zip
       - name: REAPER 7.86 x64 integration
+        if: github.event_name == 'workflow_dispatch' && inputs.reaper_smoke
         timeout-minutes: 4
         shell: pwsh
         run: |
@@ -70,5 +79,5 @@ jobs:
         shell: pwsh
         run: |
           $tag = 'windows-${{ github.sha }}'
-          gh release create $tag Foundation-Bass-Windows-x64.zip pluginval-windows.log reaper-windows.log --repo '${{ github.repository }}' --target '${{ github.sha }}' --title 'Foundation Bass 0.1.1 Windows x64 compatibility' --notes 'Windows x64: software/GDI editor rendering and static C++ runtime. DSP, processor, native editor lifecycle, pluginval level 5 and REAPER 7.86 integration checks passed. Original user crash cause remains unconfirmed; Studio One is not tested. Close your DAW and replace the entire previous .vst3 folder. Provisional artwork unchanged.'
+          gh release create $tag Foundation-Bass-Windows-x64.zip pluginval-windows.log --repo '${{ github.repository }}' --target '${{ github.sha }}' --prerelease --title 'Foundation Bass 0.1.1 Windows x64 compatibility candidate' --notes 'Compatibility candidate: software/GDI editor rendering and static C++ runtime. Required Windows DSP, processor, native editor lifecycle and pluginval level 5 checks passed. REAPER automation did not reach ReaScript startup on the CI desktop, so actual REAPER insertion and Studio One remain unverified. The original user crash cause is unconfirmed. Close the DAW and replace the entire previous .vst3 folder before retesting. DSP, parameter IDs and artwork unchanged.'
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

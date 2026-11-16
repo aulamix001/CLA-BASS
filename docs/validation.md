@@ -30,14 +30,20 @@ A revisão 0.1.1 seleciona a renderização GDI por nome na API pública do JUCE
 após o host criar o peer da janela, e incorpora o CRT do MSVC estaticamente.
 Não altera `BassDsp.h`, IDs VST3, parâmetros, presets ou arquivos de imagem.
 
-Novas barreiras no workflow antes da publicação:
+Novas barreiras obrigatórias no workflow antes da publicação da candidata:
 
 - `BassEditorLifecycle`: 12 ciclos de abrir/automatizar/restaurar/fechar a janela
   nativa durante áudio em uma thread separada; confirma o backend GDI no Windows.
 - pluginval 1.0.4, nível 5, com GUI habilitada, seed 12345.
-- `test-reaper-windows.ps1`: REAPER 7.86 x64 oficial com assinatura Authenticode
+- A checagem separada `test-reaper-windows.ps1` usa REAPER 7.86 x64 oficial com assinatura Authenticode
   verificada; configuração descartável e três ciclos de inserir VST3, abrir a
   interface, automatizar, reabrir e remover. Não usa configurações do usuário.
+  No run 43935445246, o host não chegou a executar o ReaScript: houve timeout
+  sem relatório de inserção, portanto não é aprovação nem reprodução de crash
+  do plugin. Essa checagem depende de inicialização interativa funcional e ficou
+  disponível como diagnóstico manual (`workflow_dispatch`, `reaper_smoke=true`).
+  Não bloqueia a distribuição da candidata, que é explicitamente não validada
+  em uma DAW real. Os asserts do teste não foram removidos nem convertidos em passe.
 
 O resultado da máquina Windows hospedada não comprova compatibilidade com o
 driver gráfico ou de áudio específico do usuário. Studio One permanece sem teste.
