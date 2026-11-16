@@ -4,7 +4,7 @@ Set-Location (Join-Path $PSScriptRoot '..')
 $testRoot = Join-Path $env:RUNNER_TEMP ('bass-reaper-' + [guid]::NewGuid())
 New-Item $testRoot -ItemType Directory | Out-Null
 $installer = Join-Path $testRoot 'reaper786_x64-install.exe'
-Invoke-WebRequest 'https://www.reaper.fm/files/7.x/reaper786_x64-install.exe' -OutFile $installer
+Invoke-WebRequest 'https://www.reaper.fm/files/7.x/reaper786_x64-install.exe' -OutFile $installer -TimeoutSec 45
 $signature = Get-AuthenticodeSignature $installer
 if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Cockos') {
   throw "Official REAPER installer signature could not be verified: $($signature.Status)"

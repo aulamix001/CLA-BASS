@@ -37,9 +37,20 @@ jobs:
           if (!(Test-Path $binary)) { throw 'Windows x64 VST3 binary was not produced' }
           Compress-Archive -LiteralPath $bundle -DestinationPath Foundation-Bass-Windows-x64.zip
       - name: REAPER 7.86 x64 integration
+        timeout-minutes: 4
         shell: pwsh
         run: |
-          try { & ./scripts/test-reaper-windows.ps1 } catch {
+          try {
+            $script = (Resolve-Path 'scripts/test-reaper-windows.ps1').Path
+            $test = Start-Process pwsh -ArgumentList "-NoProfile -File `"$script`"" -PassThru -RedirectStandardOutput reaper-stdout.log -RedirectStandardError reaper-stderr.log
+            if (!$test.WaitForExit(160000)) {
+              Stop-Process -Id $test.Id -Force
+              $partial = if (Test-Path reaper-windows.log) { Get-Content reaper-windows.log -Raw } else { 'No ReaScript report' }
+              throw "REAPER harness exceeded 160 seconds. $partial"
+            }
+            Get-Content reaper-stdout.log
+            if ($test.ExitCode -ne 0) { throw (Get-Content reaper-stderr.log -Raw) }
+          } catch {
             $message = $_.ToString().Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
             Write-Output "::error::$message"
             exit 1
