@@ -18,6 +18,30 @@
 
 ## Windows
 
+### Investigação do fechamento ao inserir no REAPER
+
+O build original passou no pluginval 1.0.4, nível 5, em Windows x64 no run
+[`43933617172`](https://github.com/aulamix001/CLA-BASS/actions/runs/43933617172),
+incluindo editor, abertura durante processamento e automação. Também passou no
+Linux com janela nativa sob Xvfb. Isso não reproduz nem explica a falha específica
+do usuário. Não há crash dump ou código de exceção para atribuir uma causa exata.
+
+A revisão 0.1.1 seleciona a renderização GDI por nome na API pública do JUCE,
+após o host criar o peer da janela, e incorpora o CRT do MSVC estaticamente.
+Não altera `BassDsp.h`, IDs VST3, parâmetros, presets ou arquivos de imagem.
+
+Novas barreiras no workflow antes da publicação:
+
+- `BassEditorLifecycle`: 12 ciclos de abrir/automatizar/restaurar/fechar a janela
+  nativa durante áudio em uma thread separada; confirma o backend GDI no Windows.
+- pluginval 1.0.4, nível 5, com GUI habilitada, seed 12345.
+- `test-reaper-windows.ps1`: REAPER 7.86 x64 oficial com assinatura Authenticode
+  verificada; configuração descartável e três ciclos de inserir VST3, abrir a
+  interface, automatizar, reabrir e remover. Não usa configurações do usuário.
+
+O resultado da máquina Windows hospedada não comprova compatibilidade com o
+driver gráfico ou de áudio específico do usuário. Studio One permanece sem teste.
+
 O script PowerShell e o workflow usam MSVC 2022 x64. O workflow verifica a
 existência do binário em `Contents/x86_64-win`, executa as suítes e empacota a
 pasta VST3 inteira antes de publicar o ZIP em uma release associada ao commit.

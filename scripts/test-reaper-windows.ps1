@@ -10,10 +10,13 @@ if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notm
   throw "Official REAPER installer signature could not be verified: $($signature.Status)"
 }
 $installDir = Join-Path $testRoot 'app'
-$install = Start-Process -FilePath $installer -ArgumentList "/S /D=$installDir" -Wait -PassThru
-if ($install.ExitCode -ne 0) { throw "REAPER installation failed: $($install.ExitCode)" }
-$reaper = Join-Path $installDir 'reaper.exe'
-if (!(Test-Path $reaper)) { throw 'REAPER executable not found' }
+# The signed NSIS payload contains the normal portable REAPER files. Extraction
+# avoids the installer's elevation dialog on a non-interactive Windows runner.
+& 7z x $installer "-o$installDir" -y | Out-Null
+if ($LASTEXITCODE -ne 0) { throw 'Could not extract the signed REAPER payload' }
+$reaperFile = Get-ChildItem $installDir -Recurse -Filter reaper.exe | Select-Object -First 1
+if (!$reaperFile) { throw 'REAPER executable not found in signed payload' }
+$reaper = $reaperFile.FullName
 $pluginDir = Split-Path (Resolve-Path $Bundle).Path
 $config = Join-Path $testRoot 'reaper.ini'
 @"

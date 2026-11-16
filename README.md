@@ -5,6 +5,23 @@ nos controles e no comportamento descritos no manual CLA Bass fornecido pelo
 usuário. Não contém o DSP da Waves nem exige WaveShell. Não há equivalência
 sonora comprovada com o produto original.
 
+### Revisão de compatibilidade 0.1.1
+
+A janela Windows usa o backend **Software Renderer / GDI** do JUCE, selecionado
+quando o host associa a janela nativa ao editor, em vez de depender da GPU via
+Direct2D. O runtime C++ é incorporado estaticamente no build MSVC. O DSP, os IDs
+de automação, o estado dos presets e a imagem definitiva não foram alterados.
+
+O fechamento relatado no REAPER não foi reproduzido no validador da versão
+original; essas alterações tratam dependências de compatibilidade, sem atribuir
+uma causa confirmada ao computador do usuário. O workflow inclui pluginval nível
+5, ciclos de janela nativa durante áudio e um teste com REAPER 7.86 x64 isolado.
+Studio One ainda não foi testado.
+
+Ao atualizar, feche a DAW e substitua a **pasta `.vst3` completa**. Evite manter
+uma segunda cópia antiga em outro diretório de plugins. Atualize a lista de
+plugins na DAW antes de testar novamente.
+
 ## Compilar no Windows 64 bits
 
 1. Instale Visual Studio 2022 com **Desktop development with C++**, MSVC e Windows
